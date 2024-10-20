@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+    <link rel="stylesheet" href="/css/cartstyle.css"> <!-- Link to your CSS -->
+</head>
+<body>
+    <div class="cart-page">
+        <h1>ตะกร้าของฉัน</h1>
+        <div class="cart-container">
+            <table class="cart-items">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cart-summary">
+            <p id="total-price">ราคาทั้งหมด: 0 ฿</p>
+            <button class="checkout-button">ถัดไป</button>  <!-- Checkout button for redirect -->
+        </div>
+    </div>
+
+    <!-- JavaScript to handle the button click and redirect to payment.html -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkoutButton = document.querySelector('.checkout-button');
+            checkoutButton.addEventListener('click', () => {
+                window.location.href = 'payment.html';  // Redirect to payment.html
+            });
+        });
+    </script>
+
+    <script src="/js/cartjs.js"></script> <!-- Include your updated JavaScript -->
+</body>
+</html>

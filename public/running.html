@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Orders</title>
+    <link rel="stylesheet" href="/css/running.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-button">←</button>
+            <h1>Running Orders</h1>
+        </header>
+
+        <div class="order-count">
+            <span id="order-count">0</span>
+            <p>RUNNING ORDERS</p>
+        </div>
+
+        <div class="order-list" id="order-list">
+            <!-- Orders will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- JavaScript code to fetch and display orders -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderListElement = document.getElementById('order-list');
+            const orderCountElement = document.getElementById('order-count');
+            const userID = 1; // Replace with the actual userID or retrieve dynamically
+
+            // Fetch orders from the API
+            fetch(`/api/orders/${userID}`)
+                .then(response => response.json())
+                .then(orders => {
+                    console.log('Number of orders:', orders.length);  // Debugging to see the order count
+                    orderCountElement.textContent = orders.length;
+
+                    orders.forEach(order => {
+                        // Create element for each order
+                        const orderItem = document.createElement('div');
+                        orderItem.classList.add('order-item');
+
+                        // Fetch menu details by menuID from the order
+                        fetch(`/api/menu/${order.menuID}`)
+                            .then(response => response.json())
+                            .then(menu => {
+                                // Add image (if available)
+                                const orderImage = document.createElement('img');
+                                orderImage.src = "placeholder.jpg";  // Replace with actual image URL
+                                orderImage.alt = "Product Image";
+                                orderImage.classList.add('order-image');
+
+                                // Add order details (name and price)
+                                const orderDetails = document.createElement('div');
+                                orderDetails.classList.add('order-details');
+                                const orderName = document.createElement('p');
+                                orderName.classList.add('order-name');
+                                orderName.textContent = menu.menuName;  // From menu data
+                                const orderPrice = document.createElement('p');
+                                orderPrice.classList.add('order-price');
+                                orderPrice.textContent = `${menu.menuPrice} ฿`; // From menu data
+                                orderDetails.appendChild(orderName);
+                                orderDetails.appendChild(orderPrice);
+
+                                // Add action buttons (complete and cancel)
+                                const orderActions = document.createElement('div');
+                                orderActions.classList.add('order-actions');
+                                const completeButton = document.createElement('button');
+                                completeButton.classList.add('complete-button');
+                                completeButton.textContent = 'เสร็จ';
+                                const cancelButton = document.createElement('button');
+                                cancelButton.classList.add('cancel-button');
+                                cancelButton.textContent = 'ยกเลิก';
+                                cancelButton.disabled = true; // Disable the cancel button
+
+                                orderActions.appendChild(completeButton);
+                                orderActions.appendChild(cancelButton);
+
+                                // Append all elements to order item
+                                orderItem.appendChild(orderImage);
+                                orderItem.appendChild(orderDetails);
+                                orderItem.appendChild(orderActions);
+
+                                // Append order item to the order list
+                                orderListElement.appendChild(orderItem);
+                            })
+                            .catch(menuError => {
+                                console.error('Error fetching menu:', menuError);
+                            });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Payment</title>
+  <link rel="stylesheet" href="/css/paymentstyle.css">
+</head>
+<body>
+
+  <div class="payment-container">
+    <h2><span id="total-price">90</span> ฿</h2>
+    <div id="qr-code-display" class="qr-code">QR CODE</div>
+    <button id="complete-btn" class="complete-btn">เสร็จสิ้น</button>
+  </div>
+
+  <script>
+    // Fetch QR Code from server and display it
+    function fetchQRCode(restaurantID) {
+      fetch(`/getQRCode/${restaurantID}`)
+        .then(response => response.json())
+        .then(data => {
+          const qrCodeDisplay = document.getElementById('qr-code-display');
+          if (data.qrCode) {
+            qrCodeDisplay.innerHTML = `<img src="${data.qrCode}" alt="QR Code" style="width: 100%; height: 100%;">`;
+          } else {
+            qrCodeDisplay.innerText = 'QR Code not found';
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching QR code:', err);
+        });
+    }
+
+    // On page load, fetch the QR code for the selected restaurant
+    document.addEventListener('DOMContentLoaded', function() {
+      const restaurantID = 1; // Replace with actual restaurant ID
+      fetchQRCode(restaurantID);
+    });
+
+    // Handle the "เสร็จสิ้น" button click
+    document.getElementById('complete-btn').addEventListener('click', function() {
+      // Redirect to confirmation page
+      window.location.href = 'confirmation.html';
+    });
+  </script>
+
+</body>
+</html>

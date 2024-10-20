@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านพี่ช้าง</title>
+    <link rel="stylesheet" href="/css/TRestCss.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Menu Page -->
+        <div class="menu-page">
+            <div class="menu-header">
+                <button class="back-button" id="backButton">&larr;</button>
+                <h2>ร้านพี่ช้าง</h2>
+            </div>
+            <div class="menu-panel">
+                <h3>MENU</h3>
+                <div class="menu-list">
+                    <!-- Menu items will be dynamically loaded here -->
+                </div>
+            </div>
+            <div class="cart-button">
+                <button class="cart-icon" id="go-to-cart-button">
+                    Go to Cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Detail Page -->
+        <div class="menu-detail-page" style="display: none;">
+            <div class="menu-header">
+                <button class="back-to-menu-button">&larr;</button>
+                <h2></h2>
+            </div>
+            <div class="menu-description">
+                <textarea placeholder="หมายเหตุเพิ่มเติม" rows="2"></textarea>
+            </div>
+            <div class="menu-actions">
+                <div class="quantity-control">
+                    <button class="quantity-button" id="decrease">-</button>
+                    <span id="quantity">1</span>
+                    <button class="quantity-button" id="increase">+</button>
+                </div>
+                <button class="add-cart-button">
+                    <span>Add Cart</span>
+                    <span>45฿</span>
+                </button>
+            </div>
+            <div class="add-success" style="display: none;">
+                <p>เพิ่มรายการสำเร็จ</p>
+            </div>
+        </div>
+
+        <!-- Cart Section -->
+        <div class="cart-section" style="display: none;">
+            <div class="cart-header">
+                <button class="back-to-menu-from-cart-button">&larr;</button>
+                <h3>ตะกร้าของคุณ</h3>
+            </div>
+            <ul class="cart-list"></ul>
+            <p class="total-cost">Total: ฿0.00</p>
+            <button class="clear-cart-button">Clear Cart</button>
+        </div>
+    </div>
+
+    <!-- JavaScript File -->
+    <script src="/js/TRestJS.js"></script>
+
+    <script>
+        // Redirect to cart page when cart button is clicked
+        document.getElementById('go-to-cart-button').addEventListener('click', function() {
+            window.location.href = '/cart';  // Ensure the route to 'cart.html' is correct
+        });
+
+        // Redirect to localhost:3000 when back button is clicked
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'http://localhost:3000'; // Redirect to localhost:3000
+        });
+    </script>
+</body>
+</html>

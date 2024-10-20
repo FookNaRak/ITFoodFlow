@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT's FOOD</title>
+    <link rel="stylesheet" href="/css/homestyles.css">
+</head>
+<body>
+    <div class="main-container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">IT's FOOD</h1>
+            </div>
+            <div class="logout-container">
+                <a href="home.html" class="logout">Log out</a>
+            </div>            
+        </header>
+
+        <main class="main-content">
+            <!-- Tracking Section -->
+            <section class="tracking">
+                <h2>Tracking</h2>
+                <div class="tracking-box" id="open-tracking">Tracking</div>
+            </section>
+
+            <!-- Shops Section -->
+            <section class="shops">
+                <h2>Shops</h2>
+                <div id="shop-grid" class="shop-grid">
+                    <!-- Shops will be displayed here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for tracking -->
+    <div id="tracking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Tracking</h2>
+            <div class="tracking-item">
+                <div class="tracking-detail">
+                    <img src="path/to/image" alt="item image">
+                    <div class="item-info">
+                        <p>กะเพราหมูกรอบ</p>
+                        <p>45 ฿</p>
+                    </div>
+                    <div class="item-status">
+                        <p>เหลืออีก 2 คิว</p>
+                        <button class="delete-btn">🗑️</button>
+                    </div>
+                </div>
+                <div class="tracking-detail">
+                    <img src="path/to/image" alt="item image">
+                    <div class="item-info">
+                        <p>ข้าวผัดเบคอน</p>
+                        <p>45 ฿</p>
+                    </div>
+                    <div class="item-status">
+                        <p class="success">เสร็จสิ้น</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Encapsulated JavaScript -->
+    <script>
+        class Shop {
+            #shopGrid;
+
+            constructor(shopGridId) {
+                this.#shopGrid = document.getElementById(shopGridId);
+            }
+
+            // Public method to fetch shops
+            fetchShops() {
+                fetch('/api/shops')
+                    .then(response => response.json())
+                    .then(data => this.#renderShops(data))
+                    .catch(error => {
+                        console.error('Error fetching shops:', error);
+                    });
+            }
+
+            // Private method to render shops
+            #renderShops(shops) {
+                shops.forEach(shop => {
+                    const shopItem = document.createElement('div');
+                    shopItem.className = 'shop-item';
+                    shopItem.innerHTML = `
+                        <a href="http://localhost:5000/restaurant" class="shop-link">
+                            <p>${shop.shopName}</p>
+                            <p>Location: ${shop.location || 'Not specified'}</p>
+                        </a>
+                    `;
+                    this.#shopGrid.appendChild(shopItem);
+                });
+            }
+
+            // Getter for the shopGrid (read-only)
+            get shopGrid() {
+                return this.#shopGrid;
+            }
+        }
+
+        class TrackingModal {
+            #modal;
+            #openBtn;
+            #closeBtn;
+
+            constructor(modalId, openBtnId, closeBtnClass) {
+                this.#modal = document.getElementById(modalId);
+                this.#openBtn = document.getElementById(openBtnId);
+                this.#closeBtn = document.getElementsByClassName(closeBtnClass)[0];
+                this.#initializeEvents();
+            }
+
+            // Private method to initialize events
+            #initializeEvents() {
+                this.#openBtn.onclick = () => this.#openModal();
+                this.#closeBtn.onclick = () => this.#closeModal();
+                window.onclick = (event) => {
+                    if (event.target == this.#modal) {
+                        this.#closeModal();
+                    }
+                };
+            }
+
+            // Private method to open modal
+            #openModal() {
+                this.#modal.style.display = "block";
+            }
+
+            // Private method to close modal
+            #closeModal() {
+                this.#modal.style.display = "none";
+            }
+
+            // Getter for the modal visibility state
+            get isModalOpen() {
+                return this.#modal.style.display === "block";
+            }
+
+            // Setter to open/close modal from outside
+            set modalVisible(isVisible) {
+                this.#modal.style.display = isVisible ? "block" : "none";
+            }
+        }
+
+        // Initialize classes when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const shopInstance = new Shop('shop-grid');
+            shopInstance.fetchShops();
+
+            const trackingModalInstance = new TrackingModal('tracking-modal', 'open-tracking', 'close-btn');
+
+            // Example of using the setter to open the modal
+            trackingModalInstance.modalVisible = false; // This will open the modal
+
+            // Example of using the getter to check if the modal is open
+            console.log(trackingModalInstance.isModalOpen); // Should log `true`
+        });
+    </script>
+</body>
+</html>
